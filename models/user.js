@@ -9,12 +9,18 @@ const User = connection.define('user', {
 })
 
 const syncAndSeed = () => {
-    return connection.sync().then(asdf => {
-        console.log(asdf)
+    return connection.sync().then(() => {
+        return Promise.all([
+            User.create({name : 'Harry'}),
+            User.create({name : 'Moe'}),
+            User.create({name : 'Larry'}),
+            User.create({name : 'Curly'})
+        ]).then( users => users)
     })
 }
 
 module.exports = {
     User, 
-    connection
+    connection,
+    syncAndSeed
 }
