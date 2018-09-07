@@ -33,8 +33,12 @@ router.put('/users/:id', (req, res, next) => {
 
 router.delete('/users/:id', (req, res, next) => {
   User.findById(req.params.id)
-    .then(user => User.destroy(user))
-    .then(data => res.send(data))
+    .then(user => {
+      user.destroy();
+    })
+    .then(copy => {
+      res.send(copy);
+    })
     .catch(error => next(error));
 });
 

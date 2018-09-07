@@ -27,8 +27,6 @@ class UpdateUser extends React.Component {
   }
   handleSubmit(event) {
     event.preventDefault();
-    console.log(this.props.match.params.id);
-    console.log(this.state);
     axios
       .put(`/api/users/${this.props.match.params.id}`, this.state)
       .then(user => {
@@ -39,7 +37,7 @@ class UpdateUser extends React.Component {
   render() {
     return (
       <div>
-        <Users users={this.props.users} />
+        <Users users={this.props.users} deleteUser={this.props.deleteUser} />
         <UserForm
           submit={this.handleSubmit}
           change={this.handleChange}
@@ -49,5 +47,5 @@ class UpdateUser extends React.Component {
     );
   }
 }
-
+3;
 export default UpdateUser;

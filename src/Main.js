@@ -16,8 +16,12 @@ class Main extends React.Component {
     this.addUser = this.addUser.bind(this);
     this.update = this.update.bind(this);
     this.deleteUser = this.deleteUser.bind(this);
+    this.loadUsers = this.loadUsers.bind(this);
   }
   componentDidMount() {
+    this.loadUsers();
+  }
+  loadUsers() {
     return axios
       .get('/api/users')
       .then(data => {
@@ -35,22 +39,19 @@ class Main extends React.Component {
     const copy = this.state.users.slice();
   }
   deleteUser(id) {
-    axios.delete(`/users/${id}`).then(data => {
-      const deleted = data.data;
-      console.log(deleted);
-      const newArr = this.state.users.filter(function(user) {
-        return user.id !== deleted.id;
-      });
-      this.setState({
-        users: newArr,
-      });
+    axios.delete(`api/users/${id}`).then(() => {
+      this.loadUsers();
     });
   }
 
   render() {
+    const renderNav = ({ location }) => {
+      //since we're using a route to render navbar we get the route parameters (history, location, params)
+      return <NavBar users={this.state.users} path={location.pathname} />;
+    };
     return (
       <div>
-        <NavBar users={this.state.users} />
+        <Route render={renderNav} />
         <hr />
         <div>
           <Route
@@ -71,7 +72,7 @@ class Main extends React.Component {
               <UserCreate
                 addUser={this.addUser}
                 users={this.state.users}
-                deleteUSer={this.deleteUser}
+                deleteUser={this.deleteUser}
               />
             )}
           />
@@ -81,6 +82,7 @@ class Main extends React.Component {
               <UpdateUser
                 update={this.update}
                 users={this.state.users}
+                deleteUser={this.deleteUser}
                 {...props}
               />
             )}
